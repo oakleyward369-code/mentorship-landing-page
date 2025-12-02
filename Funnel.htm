@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KOTG Trading Bootcamp</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --black:#0a0a0a;
+      --grey-900:#1b1b1b;
+      --grey-700:#2b2b2b;
+      --silver:#cfcfcf;
+      --glow: rgba(200,200,200,0.12);
+    }
+
+    html,body{height:100%;}
+    body{
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: linear-gradient(180deg,var(--black) 10%, #0f0f0f 60%, var(--grey-900) 100%);
+      color:var(--silver);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Bubble glowing heading effect */
+    .bubble-title{
+      font-weight:800;
+      font-size: clamp(28px, 5vw, 56px);
+      line-height:1.02;
+      letter-spacing: -0.02em;
+      color: var(--silver);
+      position:relative;
+      display:inline-block;
+      padding: 6px 18px;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 30px rgba(200,200,200,0.03) inset;
+      text-shadow: 0 6px 22px rgba(0,0,0,0.6), 0 0 18px rgba(180,180,180,0.03);
+    }
+
+    /* Faded graded font look using overlay */
+    .bubble-title::after{
+      content: '';
+      position:absolute;
+      inset:0;
+      border-radius:9999px;
+      mix-blend-mode: overlay;
+      background: linear-gradient(90deg, rgba(50,50,50,0.18), rgba(0,0,0,0.35));
+      pointer-events:none;
+    }
+
+    /* Subheading modern font style */
+    .lead{font-size:clamp(14px,1.6vw,18px); color:rgba(207,207,207,0.92); max-width:760px;}
+
+    /* CTA glow */
+    .cta-top{transition: all 200ms ease;}
+    .cta-top:hover{transform: translateY(-4px); box-shadow: 0 10px 35px rgba(200,200,200,0.06), 0 0 24px rgba(200,200,200,0.06);}
+    .btn-glow{
+      background: linear-gradient(90deg,#2b2b2b,#1a1a1a);
+      color:var(--silver);
+      border: 1px solid rgba(200,200,200,0.06);
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-weight:700;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      transition: all 220ms cubic-bezier(.2,.9,.2,1);
+    }
+    .btn-glow:hover{
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 18px 50px rgba(120,120,120,0.08), 0 0 30px rgba(200,200,200,0.06);
+      filter: drop-shadow(0 6px 28px rgba(120,120,120,0.04));
+    }
+
+    /* floating candlesticks background */
+    .candles-wrap{position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;}
+    .candle{
+      position:absolute;
+      will-change: transform, opacity;
+      opacity:0.9;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.6));
+    }
+
+    /* animation for float */
+    @keyframes floatUp{
+      0%{transform: translateY(30px) translateX(0) scale(0.98); opacity:0.85}
+      50%{transform: translateY(-20px) translateX(6px) scale(1.02); opacity:1}
+      100%{transform: translateY(30px) translateX(0) scale(0.98); opacity:0.85}
+    }
+
+    /* symmetry helpers */
+    .container-fixed{max-width:1100px;margin:0 auto;padding:0 20px;position:relative;z-index:10;}
+
+    /* Testimonials card */
+    .testimonial-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.05)); border:1px solid rgba(255,255,255,0.04); padding:20px; border-radius:12px;}
+
+    /* ensure mobile spacing looks tight */
+    @media (max-width:640px){
+      .container-fixed{padding:0 16px;}
+      .bubble-title{padding:8px 14px}
+    }
+  </style>
+
+</head>
+<body class="antialiased">
+
+  <!-- Floating Candlesticks Background -->
+  <div class="candles-wrap" aria-hidden="true">
+    <!-- We'll generate multiple SVG candlesticks positioned and animated via inline styles -->
+    <!-- Example candlesticks; they mimic real candles: body + wick. We'll position them across the screen. -->
+
+    <!-- Candle 1 -->
+    <svg class="candle" style="left:6%; top:40%; width:60px; animation: floatUp 8s ease-in-out infinite; transform-origin:center;" viewBox="0 0 40 120">
+      <!-- wick -->
+      <rect x="18" y="2" width="4" height="18" fill="#cfcfcf" opacity="0.12" />
+      <!-- body (bull) -->
+      <rect x="8" y="30" width="24" height="60" rx="2" fill="#a7b0b6" opacity="0.12" />
+      <!-- top wick -->
+      <rect x="18" y="92" width="4" height="18" fill="#cfcfcf" opacity="0.12" />
+    </svg>
+
+    <!-- Candle 2 -->
+    <svg class="candle" style="left:18%; top:48%; width:48px; animation: floatUp 7.5s ease-in-out 1s infinite;" viewBox="0 0 40 120">
+      <rect x="18" y="6" width="4" height="22" fill="#cfcfcf" opacity="0.10" />
+      <rect x="8" y="24" width="24" height="72" rx="2" fill="#9aa3aa" opacity="0.10" />
+      <rect x="18" y="100" width="4" height="14" fill="#cfcfcf" opacity="0.10" />
+    </svg>
+
+    <!-- Candle 3 -->
+    <svg class="candle" style="left:32%; top:34%; width:72px; animation: floatUp 9.5s ease-in-out 0.5s infinite;" viewBox="0 0 40 140">
+      <rect x="18" y="0" width="4" height="24" fill="#cfcfcf" opacity="0.14" />
+      <rect x="8" y="36" width="24" height="80" rx="2" fill="#bac3c8" opacity="0.12" />
+      <rect x="18" y="120" width="4" height="18" fill="#cfcfcf" opacity="0.14" />
+    </svg>
+
+    <!-- Candle 4 -->
+    <svg class="candle" style="left:52%; top:46%; width:56px; animation: floatUp 8.7s ease-in-out 1.2s infinite;" viewBox="0 0 40 120">
+      <rect x="18" y="4" width="4" height="20" fill="#cfcfcf" opacity="0.10" />
+      <rect x="8" y="28" width="24" height="68" rx="2" fill="#9da6ad" opacity="0.10" />
+      <rect x="18" y="100" width="4" height="16" fill="#cfcfcf" opacity="0.10" />
+    </svg>
+
+    <!-- Candle 5 -->
+    <svg class="candle" style="left:72%; top:38%; width:80px; animation: floatUp 10s ease-in-out 0.8s infinite;" viewBox="0 0 40 140">
+      <rect x="18" y="2" width="4" height="24" fill="#cfcfcf" opacity="0.12" />
+      <rect x="8" y="40" width="24" height="84" rx="2" fill="#c0c9cf" opacity="0.10" />
+      <rect x="18" y="128" width="4" height="12" fill="#cfcfcf" opacity="0.12" />
+    </svg>
+
+    <!-- Candle 6 -->
+    <svg class="candle" style="left:88%; top:50%; width:48px; animation: floatUp 7.8s ease-in-out 0.2s infinite;" viewBox="0 0 40 120">
+      <rect x="18" y="8" width="4" height="12" fill="#cfcfcf" opacity="0.08" />
+      <rect x="8" y="30" width="24" height="64" rx="2" fill="#9aa3aa" opacity="0.08" />
+      <rect x="18" y="98" width="4" height="16" fill="#cfcfcf" opacity="0.08" />
+    </svg>
+
+  </div>
+
+  <!-- Page content container (symmetrical) -->
+  <header class="py-10">
+    <div class="container-fixed flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <h1 class="bubble-title">KOTG Trading Bootcamp</h1>
+      </div>
+
+      <!-- TOP CTA (only top CTA allowed) -->
+      <div>
+        <a href="#apply" class="cta-top btn-glow">Apply for Mentorship</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-fixed text-center mt-6 lg:mt-12">
+
+    <!-- HERO -->
+    <section class="mx-auto max-w-3xl">
+      <p class="lead mx-auto mb-8">Master a simple, high-probability profitable trading strategy with exclusive weekly 1–1 private calls, live trading sessions with consistently profitable traders executing this system daily, and full access to in-depth guidance where you can ask anything you need to accelerate your growth.</p>
+
+      <!-- Symmetrical feature grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
+        <div class="testimonial-card text-left">
+          <h3 class="text-white font-semibold">Trend & Market Structure</h3>
+          <p class="mt-2 text-sm text-gray-300">Build directional bias using higher time frames and clean market narrative.</p>
+        </div>
+
+        <div class="testimonial-card text-left">
+          <h3 class="text-white font-semibold">The Algorithmic Secrets</h3>
+          <p class="mt-2 text-sm text-gray-300">The algorithmic secrets of the market and how you can build a high-probability narrative on price to structure your system around.</p>
+        </div>
+
+        <div class="testimonial-card text-left">
+          <h3 class="text-white font-semibold">Liquidity & MSS Entries</h3>
+          <p class="mt-2 text-sm text-gray-300">Exact liquidity sweep identification and market structure shifts to time high-probability entries.</p>
+        </div>
+
+        <div class="testimonial-card text-left">
+          <h3 class="text-white font-semibold">Psychology & Execution</h3>
+          <p class="mt-2 text-sm text-gray-300">Accountability, weekly 1–1 coaching and live feedback to build consistency and discipline.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials (placeholder) -->
+    <section class="mt-14">
+      <div class="max-w-4xl mx-auto text-left">
+        <h2 class="text-2xl font-semibold mb-4">Trader Results & Feedback</h2>
+
+        <!-- Actual testimonials -->
+<section class="mt-14">
+  <div class="max-w-4xl mx-auto text-left">
+    <h2 class="text-2xl font-semibold mb-4">Trader Results & Feedback</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Testimonial 1 -->
+      <div class="testimonial-card">
+        <h3 class="text-white font-semibold mb-2">Topstep Funded Trader Achievement</h3>
+        <p class="text-sm text-gray-300 mb-4">“I officially became a Topstep Funded Trader™ with a 50K Buying Power account. This milestone proved my discipline, risk management, and consistency. Now I’m able to pay myself up to four times per month thanks to this system.”</p>
+        <img src="sandbox:/mnt/data/Passed.png" alt="Topstep Funded Trader Confirmation Screenshot" class="rounded-lg w-full opacity-90 shadow-lg" />
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="testimonial-card">
+        <h3 class="text-white font-semibold mb-2">AquaFutures Payout – $1,015</h3>
+        <p class="text-sm text-gray-300 mb-4">“I received a $1,015 payout from AquaFutures. This strategy and mentorship finally allowed me to generate real withdrawal-ready profits.”</p>
+        <img src="sandbox:/mnt/data/Payout.png" alt="AquaFutures Payout Confirmation Screenshot" class="rounded-lg w-full opacity-90 shadow-lg" />
+      </div>
+
+    </div>
+  </div>
+</section>
+
+  </main>
+
+  <!-- Bottom Buy CTA (only Buy CTA allowed, symmetry maintained) -->
+  <footer class="mt-14 mb-16">
+    <div class="container-fixed text-center">
+      <div class="max-w-2xl mx-auto">
+        <h2 class="text-xl font-semibold mb-3">Ready to secure your spot?</h2>
+        <p class="text-gray-300 mb-6">Limited cohort size — we prioritise focused, high-touch mentorship.</p>
+
+        <!-- BUY MENTORSHIP BUTTON -->
+        <a id="buy-btn" href="YOUR_PAYMENT_LINK" class="btn-glow inline-block px-8 py-4">Buy Mentorship</a>
+
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // small JS to randomly vary animation durations/locations for candlesticks to feel organic
+    (function(){
+      const candles = document.querySelectorAll('.candles-wrap .candle');
+      candles.forEach((c,i)=>{
+        const delay = (Math.random()*1.2).toFixed(2);
+        const dur = (7 + Math.random()*4).toFixed(2);
+        const left = (5 + Math.random()*88).toFixed(2);
+        const top = (25 + Math.random()*55).toFixed(2);
+        const scale = (0.8 + Math.random()*0.6).toFixed(2);
+        c.style.left = left + '%';
+        c.style.top = top + '%';
+        c.style.width = (40 + Math.random()*60) + 'px';
+        c.style.animationDelay = delay + 's';
+        c.style.animationDuration = dur + 's';
+        c.style.transform = `scale(${scale})`;
+        c.style.opacity = 0.85;
+      });
+    })();
+
+    // Accessibility: Ensure only two CTAs exist visually (we intentionally have only two interactive CTAs)
+  </script>
+
+</body>
+</html>
